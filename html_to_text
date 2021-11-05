@@ -1,0 +1,21 @@
+# import pandas
+import glob
+import re
+import os
+from pathlib import Path
+from bs4 import BeautifulSoup
+
+for filepath in glob.iglob(r'filepath/**/*.html', recursive=True):
+    with open(filepath,  "r", encoding="UTF-8") as file:
+        s = BeautifulSoup(file, 'html5')
+        s = s.get_text("\n\n") 
+        s = s.replace("\n", ' ')
+        s = s.replace("$", ' ')        
+        s = re.sub(r'[0-9]+', '', s)
+        s = s.replace("(", ' ')        
+        s = s.replace(")", ' ')
+        s = s.replace("  ", ' ')
+        s = re.sub("\s\s+" , " ", s)
+        s = re.sub('\s{2,}', ' ', s)
+    with open(filepath.replace('.html', '') + ".txt", "w", encoding='utf-8') as file:
+        file.write(s)
